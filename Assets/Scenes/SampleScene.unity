@@ -381,7 +381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef034533472851841b5d7b620fb58c80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MouseLook
-  mouseSensitivity: 300
+  mouseSensitivity: 250
   playerBody: {fileID: 1303849870}
 --- !u!1 &410087039
 GameObject:
@@ -1117,7 +1117,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 334d8a25e85845b4ab9b5ae5cd750d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController.PlayerController
-  _stats: {fileID: 0}
+  _stats: {fileID: 11400000, guid: ca7b296ddab72354ab7a6e93efdf66a8, type: 2}
+  camDirection: {fileID: 330585546}
+  controller: {fileID: 1303849869}
 --- !u!1 &1955975624
 GameObject:
   m_ObjectHideFlags: 0
