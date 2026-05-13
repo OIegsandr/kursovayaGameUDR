@@ -8,6 +8,9 @@ namespace PlayerController
         [Header("INPUT")] [Tooltip("Makes all Input snap to an integer. Prevents gamepads from walking slowly. Recommended value is true to ensure gamepad/keybaord parity.")]
         public bool SnapInput = true;
 
+        [Header("INPUT")] [Tooltip("Player's X and Y sensitivity. Used for camera rotation.")]
+        public float Sensitivity = 360;
+
         [Tooltip("Minimum input required before a left or right is recognized. Avoids drifting with sticky controllers"), Range(0.01f, 0.99f)]
         public float HorizontalDeadZoneThreshold = 0.1f;
 

@@ -1,37 +1,38 @@
 using System;
-using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class MouseLook : MonoBehaviour
-{
-    public float mouseSensitivity;
-    public Transform playerBody;
-    float xRotation = 0f; 
+namespace PlayerController{
+    public class MouseLook : MonoBehaviour{
+        [SerializeField] private ScriptableStats _stats;
+        public Transform playerBody;
+        float xRotation = 0f; 
 
-    void Start()
-    {
-        LockCursor();
-    }
-    void LateUpdate()
-    {
-        ApplyInputs();
-    }
+        void Start(){
+            LockCursor();
+        }
+        
+        void LateUpdate(){
+            ApplyInputs();
+        }
 
-    private void ApplyInputs(){
-        float mouseMoveX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-        float mouseMoveY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime; 
+        private void ApplyInputs(){
+            float mouseMoveX = Input.GetAxis("Mouse X") * _stats.Sensitivity * Time.deltaTime;
+            float mouseMoveY = Input.GetAxis("Mouse Y") * _stats.Sensitivity * Time.deltaTime; 
 
-        xRotation -= mouseMoveY;
-        xRotation = Math.Clamp(xRotation, -90f, 90f);
+            xRotation -= mouseMoveY;
+            xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        playerBody.Rotate(Vector3.up * mouseMoveX);
-    }
+            // Поворот камеры вверх-вниз (X - вертикально)
+            transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+            
+            // Поворот игрока влево-вправо (Y - горизонтально)
+            playerBody.Rotate(Vector3.up * mouseMoveX);
+        }
 
-    private void LockCursor()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
+        private void LockCursor(){
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 
 }

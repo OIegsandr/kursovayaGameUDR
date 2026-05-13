@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: PlayerController
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController.ScriptableStats
   SnapInput: 1
+  Sensitivity: 600
   HorizontalDeadZoneThreshold: 0.3
   VerticalDeadZoneThreshold: 0.3
   MaxSpeed: 14
