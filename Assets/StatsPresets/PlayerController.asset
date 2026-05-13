@@ -13,15 +13,15 @@ MonoBehaviour:
   m_Name: PlayerController
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController.ScriptableStats
   SnapInput: 1
-  Sensitivity: 600
+  Sensitivity: 800
   HorizontalDeadZoneThreshold: 0.3
   VerticalDeadZoneThreshold: 0.3
-  MaxSpeed: 14
-  Acceleration: 120
+  MaxSpeed: 20
+  Acceleration: 80
   GroundDeceleration: 60
-  AirDeceleration: 100
+  AirDeceleration: 108.7
   GrounderDistance: 0.05
-  JumpPower: 33
+  JumpPower: 30
   MaxFallSpeed: 200
   FallAcceleration: 110
   JumpEndEarlyGravityModifier: 3
