@@ -16,10 +16,12 @@ MonoBehaviour:
   Sensitivity: 800
   HorizontalDeadZoneThreshold: 0.3
   VerticalDeadZoneThreshold: 0.3
-  MaxSpeed: 20
+  CrouchSpeed: 6
+  WalkSpeed: 10
+  SprintSpeed: 20
   Acceleration: 80
   GroundDeceleration: 60
-  AirDeceleration: 108.7
+  AirDeceleration: 110
   GrounderDistance: 0.05
   JumpPower: 30
   MaxFallSpeed: 200

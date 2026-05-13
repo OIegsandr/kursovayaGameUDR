@@ -23,8 +23,17 @@ namespace PlayerController
 
         #endregion
 
-        #region Gravity
+        #region MovementInvolved
 
+        private float fMoveSpeed;
+
+        public float fCrouchYScale;
+
+        private float fStartYScale;
+
+        #endregion
+
+        #region Gravity
         private float fTime;
         private bool bJumpToConsume;
         private bool bBufferedJumpUsable;
@@ -38,51 +47,70 @@ namespace PlayerController
 
         #endregion
 
-        #region voids
+        #region Voids
 
         void Awake(){
             _cachedQueryStartInColliders = Physics2D.queriesStartInColliders;
         }
-        void Update()
-        {
+
+        void Start(){
+            StartMisc();
+        }
+
+        void Update(){
             fTime += Time.deltaTime;
             GatherInput();
         }
 
-        void FixedUpdate()
-        {
+        void FixedUpdate(){
             HandleDirection();
 
             CheckCollisions();
             HandleJump();
+            HandleCrouch();
             HandleGravity();
+            HandleMovementState();
 
             ApplyMovement();
         }
 
+        private void StartMisc(){
+            fStartYScale = transform.localScale.y;
+        }
+
         #region movement
 
-        private void GatherInput()
-        {
-            _frameInput = new FrameInput
-            {
-                JumpDown = Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.C),
+        private void GatherInput(){
+            _frameInput = new FrameInput{
+                JumpDown = Input.GetButtonDown("Jump") || Input.GetKeyDown(KeyCode.Space),
                 JumpHeld = Input.GetButton("Jump") || Input.GetKey(KeyCode.C),
-                Move = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"))
+                Move = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")),
+                SprintHeld = Input.GetKey(KeyCode.LeftShift),
+                CrouchHeld = Input.GetKey(KeyCode.C)
             };
 
-            if (_stats.SnapInput)
-            {
+            if (_stats.SnapInput){
                 _frameInput.Move.x = Mathf.Abs(_frameInput.Move.x) < _stats.HorizontalDeadZoneThreshold ? 0 : Mathf.Sign(_frameInput.Move.x);
                 _frameInput.Move.y = Mathf.Abs(_frameInput.Move.y) < _stats.VerticalDeadZoneThreshold ? 0 : Mathf.Sign(_frameInput.Move.y);
             }
 
-            if (_frameInput.JumpDown)
-            {
+            if (_frameInput.JumpDown){
                 if (_frameInput.JumpDown){
                     bJumpToConsume = true;
                     fTimeJumpWasPressed = fTime;
                 }
+            }
+        }
+
+        private void HandleMovementState(){
+            if (_frameInput.CrouchHeld){
+                fMoveSpeed = _stats.CrouchSpeed;
+            }
+            else if (_frameInput.SprintHeld){
+                fMoveSpeed = _stats.SprintSpeed;
+            }
+            else{
+                fMoveSpeed = _stats.WalkSpeed;
             }
         }
         private void HandleDirection(){
@@ -108,7 +136,7 @@ namespace PlayerController
             }
             else{
 
-                Vector3 targetXZ = moveDirrection.normalized * Mathf.Min(moveDirrection.magnitude * _stats.MaxSpeed, _stats.MaxSpeed);
+                Vector3 targetXZ = moveDirrection.normalized * Mathf.Min(moveDirrection.magnitude * fMoveSpeed, fMoveSpeed);
                 Vector3 target = new Vector3(targetXZ.x, _frameVelocity.y, targetXZ.z);
                 float accel = _stats.Acceleration;
                 _frameVelocity = Vector3.MoveTowards(
@@ -141,7 +169,7 @@ namespace PlayerController
             }
         }
 
-        #region jumping
+        #region Jumping
         private void HandleJump(){
             if (!bEndedJumpEarly && !bGrounded && !_frameInput.JumpHeld && _frameVelocity.y > 0) 
                 bEndedJumpEarly = true;
@@ -181,6 +209,20 @@ namespace PlayerController
             }
         }
 
+        #region Crouching
+
+        private void HandleCrouch(){
+            if (_frameInput.CrouchHeld){
+                transform.localScale = new Vector3(transform.localScale.x, fCrouchYScale, transform.localScale.z);
+            }
+            else
+            {
+                transform.localScale = new Vector3(transform.localScale.x, fStartYScale, transform.localScale.z);
+            }
+        }
+
+        #endregion
+
         #endregion
 
     }
@@ -189,6 +231,8 @@ namespace PlayerController
     {
         public bool JumpDown;
         public bool JumpHeld;
+        public bool SprintHeld;
+        public bool CrouchHeld;
         public Vector2 Move;
     }
 
